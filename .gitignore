@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # Jetbrains config files
-.idea/
+**/.idea/
