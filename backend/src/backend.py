@@ -9,28 +9,33 @@ users = {
    [
       { 
          'id' : 'xyz789',
-         'name' : 'Charlie',
-         'job': 'Janitor',
+         'user' : 'Charlie',
+         'artist': 'Frank Ocean',
+         'title': 'Nike',
       },
       {
          'id' : 'abc123', 
-         'name': 'Mac',
-         'job': 'Bouncer',
+         'user': 'Mac',
+         'artist': 'J Cole',
+         'title': 'Brackets',
       },
       {
          'id' : 'ppp222', 
-         'name': 'Mac',
-         'job': 'Professor',
+         'user': 'Mac',
+         'artist': 'Tidus',
+         'title': 'No Limitations',
       }, 
       {
          'id' : 'yat999', 
-         'name': 'Dee',
-         'job': 'Aspring actress',
+         'user': 'Dee',
+         'artist': 'Adele',
+         'title': 'Hello',
       },
       {
          'id' : 'zap555', 
-         'name': 'Dennis',
-         'job': 'Bartender',
+         'user': 'Dennis',
+         'artist': 'Kendrick Lamar',
+         'title': 'Swimming Pools',
       }
    ]
 }
@@ -39,12 +44,11 @@ users = {
 @app.route('/users', methods=['GET', 'POST'])
 def get_users():
    if request.method == 'GET':
-      search_username = request.args.get('name')
-      search_userjob = request.args.get('job')
+      search_username = request.args.get('user')
       if search_username:
          subdict = {'users_list' : []}
          for user in users['users_list']:
-            if user['name'] == search_username and user['job'] == search_userjob:
+            if user['user'] == search_username:
                subdict['users_list'].append(user)
          return subdict
       return users
