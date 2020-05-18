@@ -105,3 +105,6 @@ dist
 
 # Jetbrains config files
 **/.idea/
+
+# Any files that contain credentials that shouldn't be public
+*.credentials
