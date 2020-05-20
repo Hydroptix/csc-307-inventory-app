@@ -20,14 +20,10 @@ def get_db_client() -> MongoClient:
 
 
 def get_db_credentials() -> Tuple[str, str]:
-
-
     try:
         with open(CREDENTIALS_PATH) as f:
             username = f.readline().strip()
             password = f.readline().strip()
-
-        return username, password
 
     except FileNotFoundError as e:
 
@@ -39,6 +35,7 @@ def get_db_credentials() -> Tuple[str, str]:
             print("Credentials not found in file or environment")
             raise e
 
+    return username, password
 
 
 def try_db_connection() -> bool:
