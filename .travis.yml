@@ -9,4 +9,4 @@ install:
 before_script: cd backend
 
 script:
-  - pytest -v ./backend/src/*_tests.py
+  - pytest -v ./src/*_tests.py
