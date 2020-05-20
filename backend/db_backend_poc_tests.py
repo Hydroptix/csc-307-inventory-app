@@ -4,11 +4,6 @@ import db_backend_poc as src
 from os import path
 
 
-# Tests whether the credentials file even exists
-def test_cred_file_exists():
-    assert path.exists(src.CREDENTIALS_PATH)
-
-
 # Tests whether the backend can reach the database, but not whether the backend
 # can authenticate and read from the database
 def test_db_connection():

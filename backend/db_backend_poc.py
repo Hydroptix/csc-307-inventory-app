@@ -2,6 +2,7 @@ from typing import Tuple
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 import definitions as defs
+import os
 
 CREDENTIALS_PATH = defs.CONF_PATH + "/db.credentials"
 DB_IP = "theinventorydb-xajse.mongodb.net"
@@ -19,6 +20,8 @@ def get_db_client() -> MongoClient:
 
 
 def get_db_credentials() -> Tuple[str, str]:
+
+
     try:
         with open(CREDENTIALS_PATH) as f:
             username = f.readline().strip()
@@ -27,8 +30,15 @@ def get_db_credentials() -> Tuple[str, str]:
         return username, password
 
     except FileNotFoundError as e:
-        print("Credentials file not found")
-        raise e
+
+        # Get the credentials from the environment for Travis builds
+        username = os.environ.get('mongo-user')
+        password = os.environ.get('mongo-pass')
+
+        if username is None or password is None:
+            print("Credentials not found in file or environment")
+            raise e
+
 
 
 def try_db_connection() -> bool:
