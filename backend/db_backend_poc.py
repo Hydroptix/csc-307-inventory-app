@@ -32,8 +32,8 @@ def get_db_credentials() -> Tuple[str, str]:
     except FileNotFoundError as e:
 
         # Get the credentials from the environment for Travis builds
-        username = os.environ.get('mongo-user')
-        password = os.environ.get('mongo-pass')
+        username = os.environ.get('MongoUser')
+        password = os.environ.get('MongoPass')
 
         if username is None or password is None:
             print("Credentials not found in file or environment")
