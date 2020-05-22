@@ -1,12 +1,24 @@
-lanuage: python
+jobs:
+  include:
+    - lanuage: python
 
-python:
-  - "3.7"
+      python:
+        - "3.7"
 
-install:
-  - pip install -r requirements.txt
+      install:
+        - pip install -r requirements.txt
 
-before_script: cd backend
+      before_script: cd backend
 
-script:
-  - pytest -v ./*_tests.py
+      script:
+        - pytest -v ./*_tests.py
+
+    - language: node_js
+
+      node_js:
+        - 12
+
+      before_script: cd frontend
+
+      script:
+        - npm test
