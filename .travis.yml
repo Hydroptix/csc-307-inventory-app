@@ -7,6 +7,7 @@ jobs:
 
       install:
         - pip install -r requirements.txt
+        - pip install -U flask-cors
 
       before_script: cd backend
 
