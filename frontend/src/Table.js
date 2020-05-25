@@ -7,6 +7,9 @@ const TableHeader = () => {
 	 <th>User</th>
          <th>Artist</th>
          <th>Title</th>
+	 <th>Genre</th>
+	 <th>Duration</th>
+	 <th>Cover Art</th>
        </tr>
      </thead>
      )
@@ -19,6 +22,9 @@ const TableBody = props => {
 	  <td>{row.user}</td>
           <td>{row.artist}</td>
           <td>{row.title}</td>
+	  <td>{row.genre}</td>
+	  <td>{row.durMin}:{row.durSec}</td>
+	  <td>{row.imageURL}</td>
           <td>
             <button onClick={() => props.removeCharacter(index)}>Delete</button>
           </td>
