@@ -126,11 +126,12 @@ def get_users():
 @app.route('/users/<id>', methods=['GET', 'DELETE'])
 def get_user(id):
    if request.method == 'GET':
+      users_id = {'users_list' : [] }
       if id :
          for user in users['users_list']:
            if user['id'] == id:
-              return user
-         return ({})
+              users_id['users_list'].append(user)
+         return (users_id)
       return users
    elif request.method == 'DELETE':
       if id :
