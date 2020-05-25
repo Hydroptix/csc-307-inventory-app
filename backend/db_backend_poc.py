@@ -113,7 +113,11 @@ def get_users():
       return users
    elif request.method == 'POST':
       userToAdd = request.get_json()
-      userToAdd['id'] = generate_ID()
+      for user in users['users_list']:
+          if user['user'] == userToAdd['user']:
+              userToAdd['id'] = user['id']
+      if 'id' not in userToAdd.keys():
+          userToAdd['id'] = generate_ID()
       users['users_list'].append(userToAdd)
       resp = jsonify(userToAdd), 201
       return resp

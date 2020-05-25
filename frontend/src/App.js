@@ -63,7 +63,7 @@ class App extends Component {
           //Not handling the error. Just logging into the console.
           console.log(error);
       });
-   }
+  }
 }
 
 export default App
