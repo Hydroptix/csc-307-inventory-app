@@ -15,7 +15,6 @@ CORS(app)
 CREDENTIALS_PATH = defs.CONF_PATH + "/db.credentials"
 DB_IP = "theinventorydb-xajse.mongodb.net"
 
-
 def get_db_client() -> MongoClient:
     # keep the actual credentials in memory as short as possible
 
