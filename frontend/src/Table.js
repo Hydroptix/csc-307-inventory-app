@@ -4,7 +4,7 @@ const TableHeader = () => {
    return (
      <thead>
        <tr>
-	 <th>User</th>
+	 <th>Song ID</th>
          <th>Artist</th>
          <th>Title</th>
 	 <th>Genre</th>
@@ -19,7 +19,7 @@ const TableBody = props => {
    const rows = props.characterData.map((row, index) => {
       return (
         <tr key={index}>
-	  <td>{row.user}</td>
+	  <td>{row.song_id}</td>
           <td>{row.artist}</td>
           <td>{row.title}</td>
 	  <td>{row.genre}</td>

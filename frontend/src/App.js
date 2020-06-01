@@ -55,7 +55,7 @@ class App extends Component {
    }
 
    componentDidMount() {
-      axios.get('http://localhost:5000/users').then(res => {
+      axios.get('http://localhost:5000/songs').then(res => {
           const characters = res.data.users_list;
           this.setState({ characters });
       })
