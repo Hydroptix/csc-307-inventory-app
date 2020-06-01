@@ -31,7 +31,7 @@ class App extends Component {
 
 
    makePostCall(character){
-      return axios.post('http://localhost:5000/users', character)
+      return axios.post('http://localhost:5000/songs', character)
        .then(function (response) {
          console.log(response);
          return response;
@@ -56,7 +56,7 @@ class App extends Component {
 
    componentDidMount() {
       axios.get('http://localhost:5000/songs').then(res => {
-          const characters = res.data.users_list;
+          const characters = res.data.songs;
           this.setState({ characters });
       })
       .catch(function (error) {

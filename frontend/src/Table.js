@@ -17,9 +17,11 @@ const TableHeader = () => {
 
 const TableBody = props => {
    const rows = props.characterData.map((row, index) => {
+     console.log(row)
+     console.log(index)
       return (
         <tr key={index}>
-	  <td>{row.song_id}</td>
+	  <td>{row._id}</td>
           <td>{row.artist}</td>
           <td>{row.title}</td>
 	  <td>{row.genre}</td>
