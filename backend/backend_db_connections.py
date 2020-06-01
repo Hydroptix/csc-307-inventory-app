@@ -3,7 +3,8 @@ from flask import request
 from flask import jsonify
 from flask_cors import CORS
 import db_connect
-from model_mongodb import Song, User
+from model_mongodb import Song, User, Inventory
+
 db_client = db_connect.get_db_client()
 
 backend = Flask(__name__)
@@ -38,8 +39,6 @@ def get_songs():
 @backend.route('/songs/<id>', methods=['GET'])
 def get_song(id):
     if request.method == 'GET':
-        # TODO: refactor the model_mongodb to only return one thing instead of
-        # a dictionary guaranteed to have one thing
         return Song(db_client).find_by_id(int(id))['songs'][0]
 
 
@@ -60,20 +59,19 @@ def get_users():
             return User(db_client).find_all()
 
     elif request.method == 'POST':
-        userToAdd = User(request.get_json())
+        user_to_add = User(request.get_json())
 
-        db_resp = userToAdd.save(db_client)
+        db_resp = user_to_add.save(db_client)
 
-        http_resp = jsonify(userToAdd,201)
+        http_resp = jsonify(user_to_add, 201)
 
         return http_resp
+
 
 @backend.route('/users/<id>', methods=['GET', 'DELETE'])
 def get_user(id):
     if request.method == 'GET':
-        # TODO: refactor the model_mongodb to only return one thing instead of
-        # a dictionary guaranteed to have one thing
-        return User(db_client).find_by_id( int(id))
+        return User(db_client).find_by_id(int(id))
 
     elif request.method == 'DELETE':
         user = User({'_id': id})
@@ -82,9 +80,44 @@ def get_user(id):
         print(db_resp)
 
         if db_resp['n'] == 1:
-            http_resp = jsonify(succes=True, status_code = 204)
+            http_resp = jsonify(succes=True, status_code=204)
 
             return http_resp
 
         else:
-            return jsonify(success=False, status_code = 404)
+            return jsonify(success=False, status_code=404)
+
+
+@backend.route('/users/<id>/inv', methods=['GET', 'POST', 'DELETE'])
+def get_user_inv(id):
+    if request.method == 'GET':
+
+        search_id = request.args.get('id')
+
+        if search_id:
+            return Inventory(db_client).find_by_id(int(search_id))
+
+        else:
+            return Inventory(db_client).find_all(db_client)
+    elif request.method == 'POST':
+        inv_to_add = User(request.get_json())
+
+        db_resp = inv_to_add.save(db_client)
+
+        http_resp = jsonify(inv_to_add, 201)
+
+        return http_resp
+
+    elif request.method == 'DELETE':
+        inv = Inventory({'_id': id})
+        db_resp = inv.remove(db_client)
+
+        print(db_resp)
+
+        if db_resp['n'] == 1:
+            http_resp = jsonify(succes=True, status_code=204)
+
+            return http_resp
+
+        else:
+            return jsonify(success=False, status_code=404)
