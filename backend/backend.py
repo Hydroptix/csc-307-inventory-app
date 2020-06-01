@@ -52,13 +52,13 @@ def get_users():
         search_name = request.args.get('name')
 
         if search_id:
-            return User(db_client).find_by_id(int(search_id))
+            return User().find_by_id(db_client, int(search_id))
 
         elif search_name:
-            return User(db_client).find_by_name(search_name)
+            return User().find_by_name(db_client, search_name)
 
         else:
-            return User(db_client).find_all()
+            return User().find_all(db_client)
 
     elif request.method == 'POST':
         userToAdd = User(request.get_json())
