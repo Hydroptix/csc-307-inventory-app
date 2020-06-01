@@ -26,7 +26,7 @@ const TableBody = props => {
           <td>{row.title}</td>
 	  <td>{row.genre}</td>
 	  <td>{row.durMin}:{row.durSec}</td>
-	  <td>{row.imageURL}</td>
+	  <td>{row.image}</td>
           <td>
             <button onClick={() => props.removeCharacter(index)}>Delete</button>
           </td>
