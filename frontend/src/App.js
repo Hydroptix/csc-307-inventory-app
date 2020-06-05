@@ -21,6 +21,7 @@ class App extends Component {
       })
    }
 
+
    handleSubmit = character => {
       this.makePostCall(character).then( callResult => {
          if (callResult.status === 201) {
@@ -48,7 +49,10 @@ class App extends Component {
 
       return (
         <div className="container">
-          <Table characterData={characters} removeCharacter={this.removeCharacter} />
+          <Table characterData={characters} 
+	      removeCharacter={this.removeCharacter} 
+	      addSong={this.addSong} />
+
           <Form handleSubmit={this.handleSubmit} />
         </div>
       )
