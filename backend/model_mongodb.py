@@ -11,7 +11,15 @@ class Model(dict):
     __delattr__ = dict.__delitem__
     __setattr__ = dict.__setitem__
 
+    # We need to pass in db_client explicitly because if the client
+    # is added to the class itself it will be included in the JSON request,
+    # which the backend will throw an error for
     def save(self, db_client):
+        """
+        Send the current state to the database
+        :param db_client: MongoDB client
+        :return: None
+        """
         collection = self.get_collection(db_client)
         print(f"_id: {self._id}, name: {self.name}")
         if not self._id:
@@ -22,9 +30,14 @@ class Model(dict):
                 {"_id": int(self._id)})
         self._id = str(self._id)
 
-    def reload(self):
+    def reload(self, db_client):
+        """
+        Replace the current state with the database information
+        :return:
+        """
         if self._id:
-            result = self.collection.find_one({"_id": int(self._id)})
+            collection = self.get_collection(db_client)
+            result = collection.find_one({"_id": int(self._id)})
             if result:
                 self.update(result)
                 self._id = str(self._id)
@@ -40,8 +53,11 @@ class Model(dict):
             return resp
 
 
+# Dictionary of attributes representing a song in the database
 class Song(Model):
 
+    # it's safe to include the db_client in Song because we never write a song's
+    # state to the database
     def __init__(self, db_client):
 
         self.db_client = db_client
@@ -85,6 +101,7 @@ class Song(Model):
         return songs
 
 
+# Dictionary of attributes representing a user in the database
 class User(Model):
 
     def get_collection(self, db_client):
