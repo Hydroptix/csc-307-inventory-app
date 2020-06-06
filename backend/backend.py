@@ -3,7 +3,7 @@ from flask import request
 from flask import jsonify
 from flask_cors import CORS
 import db_connect
-from model_mongodb import Song, User
+from model_mongodb import Song, User, Playlist
 
 db_client = db_connect.get_db_client()
 
@@ -116,7 +116,7 @@ def get_inventories():
         return http_resp
 
 @backend.route('/inventories/<id>', methods=['GET', 'DELETE'])
-def get_inventories(id):
+def get_inventory(id):
     if request.method == 'GET':
         # TODO: refactor the model_mongodb to only return one thing instead of
         # a dictionary guaranteed to have one thing

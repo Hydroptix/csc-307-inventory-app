@@ -71,7 +71,7 @@ class App extends Component {
           console.log(error);
       });
       axios.get('http://localhost:5000/inventories').then(res => {
-	  const playlists = res.data.inventories;
+	  const playlists = res.data.playlists;
 	  this.setState({ playlists });
       })
       .catch(function (error) {

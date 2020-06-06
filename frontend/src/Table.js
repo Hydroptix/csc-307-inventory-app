@@ -60,7 +60,7 @@ const TableBody2 = props => {
      console.log(index)
       return (
 	<tr key={index}>
-	  <td>{row.name}</td>
+	  <td>{row.title}</td>
 	  <td>
 	    <button onClick={() => props.removeCharacter(index)}>Delete</button>
 	  </td>

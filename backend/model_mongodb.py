@@ -131,6 +131,7 @@ class User(Model):
 
         return maxid + 1
 
+
 class Playlist(Model):
 
     def get_collection(self, db_client):
@@ -144,7 +145,7 @@ class Playlist(Model):
         playlists = {'playlists': list(collection.find())}
         for playlist in playlists['playlists']:
             playlist["_id"] = str(playlist["_id"])
-        return playlist
+        return playlists
 
     def find_by_id(self, db_client, id):
 
