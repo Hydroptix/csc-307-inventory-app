@@ -41,10 +41,10 @@ const TableBody = props => {
 	  <td>{row.durMin}:{row.durSec}</td>
 	  <td>{row.image}</td>
 	  <td>
-	    <button onClick={() => props.removeCharacter(index)}>Add to Playlist</button>
+	    <button onClick={() => props.addSong(index)}>Add to Playlist</button>
 	  </td>
           <td>
-            <button onClick={() => props.removeCharacter(index)}>Delete</button>
+            <button onClick={() => props.removeSong(index)}>Delete</button>
           </td>
         </tr>
       )
@@ -62,10 +62,10 @@ const TableBody2 = props => {
 	<tr key={index}>
 	  <td>{row.title}</td>
 	  <td>
-	    <button onClick={() => props.removeCharacter(index)}>Delete</button>
+	    <button onClick={() => props.removePlaylist(index)}>Delete</button>
 	  </td>
 	  <td>
-            <button onClick={() => props.removeCharacter(index)}>Select</button>
+            <button onClick={() => props.removePlaylist(index)}>Select</button>
           </td>
 	</tr>
       )
@@ -76,14 +76,14 @@ const TableBody2 = props => {
 	      
 
 const Table = props => {
-   const { songData, playlistData, removeCharacter, addSong } = props
+   const { songData, playlistData, removeSong, removePlaylist, addSong } = props
    
    return (
      <table>
        <TableHeader />
-       <TableBody songData={songData} removeCharacter={removeCharacter} />
+       <TableBody songData={songData} removeSong={removeSong} />
        <TableHeader2 />
-       <TableBody2 playlistData={playlistData} removeCharacter={removeCharacter} />
+       <TableBody2 playlistData={playlistData} removePlaylist={removePlaylist} />
      </table>
 
    )

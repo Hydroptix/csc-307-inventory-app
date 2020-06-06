@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 class Form extends Component {
    initialState = {
-      name: '',
+      title: '',
    }
 
    state = this.initialState
@@ -21,16 +21,16 @@ class Form extends Component {
    }
 
    render() {
-      const { name } = this.state
+      const { title } = this.state
 
       return (
         <form>
-          <label htmlFor="name">Playlist Name</label>
+          <label htmlFor="title">Playlist Name</label>
           <input 
             type="text"
-            name="name"
-            id="name"
-            value={name}
+            name="title"
+            id="title"
+            value={title}
             onChange={this.handleChange} />
           <input type="button" value="Submit" onClick={this.submitForm} />
         </form>

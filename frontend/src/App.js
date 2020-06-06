@@ -23,10 +23,23 @@ class App extends Component {
    }
 
 
+   removePlaylist = index => {
+      const { playlists } = this.state
+
+      axios.delete("http://localhost:5000/inventories/".concat(playlists[index]._id))
+
+      this.setState({
+         playlists: playlists.filter((playlist, i) => {
+            return i !== index
+         }),
+      })
+   }
+
+
    handleSubmit = playlist => {
       this.makePostCallPlaylist(playlist).then( callResult => {
          if (callResult.status === 201) {
-            this.setState({ playlists: [...this.state.palylists, callResult.data] });
+            this.setState({ playlists: [...this.state.playlists, callResult.data] });
          }
       });
    }
@@ -53,7 +66,8 @@ class App extends Component {
         <div className="container">
           <Table songData={songs}
 	      playlistData={playlists}
-	      removeCharacter={this.removeCharacter} 
+	      removeSong={this.removeSong}
+	      removePlaylist={this.removePlaylist}
 	      addSong={this.addSong} />
 
           <Form handleSubmit={this.handleSubmit} />
