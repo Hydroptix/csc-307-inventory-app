@@ -31,7 +31,7 @@ class App extends Component {
 
 
    makePostCall(character){
-      return axios.post('http://localhost:5000/users', character)
+      return axios.post('http://localhost:5000/songs', character)
        .then(function (response) {
          console.log(response);
          return response;
@@ -55,15 +55,15 @@ class App extends Component {
    }
 
    componentDidMount() {
-      axios.get('http://localhost:5000/users').then(res => {
-          const characters = res.data.users_list;
+      axios.get('http://localhost:5000/songs').then(res => {
+          const characters = res.data.songs;
           this.setState({ characters });
       })
       .catch(function (error) {
           //Not handling the error. Just logging into the console.
           console.log(error);
       });
-   }
+  }
 }
 
 export default App

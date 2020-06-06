@@ -10,11 +10,11 @@ from flask_cors import CORS
 import random
 app = Flask(__name__)
 CORS(app)
+import os.path as path
 
 
-CREDENTIALS_PATH = defs.CONF_PATH + "/db.credentials"
+CREDENTIALS_PATH = path.join(defs.CONF_PATH, "db.credentials")
 DB_IP = "theinventorydb-xajse.mongodb.net"
-
 
 def get_db_client() -> MongoClient:
     # keep the actual credentials in memory as short as possible
@@ -113,7 +113,11 @@ def get_users():
       return users
    elif request.method == 'POST':
       userToAdd = request.get_json()
-      userToAdd['id'] = generate_ID()
+      for user in users['users_list']:
+          if user['user'] == userToAdd['user']:
+              userToAdd['id'] = user['id']
+      if 'id' not in userToAdd.keys():
+          userToAdd['id'] = generate_ID()
       users['users_list'].append(userToAdd)
       resp = jsonify(userToAdd), 201
       return resp
@@ -122,11 +126,12 @@ def get_users():
 @app.route('/users/<id>', methods=['GET', 'DELETE'])
 def get_user(id):
    if request.method == 'GET':
+      users_id = {'users_list' : [] }
       if id :
          for user in users['users_list']:
            if user['id'] == id:
-              return user
-         return ({})
+              users_id['users_list'].append(user)
+         return (users_id)
       return users
    elif request.method == 'DELETE':
       if id :

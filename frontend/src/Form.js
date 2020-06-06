@@ -5,6 +5,10 @@ class Form extends Component {
       user: '',
       artist: '',
       title: '',
+      genre: '',
+      durMin: '',
+      durSec: '',
+      imageURL: '',
    }
 
    state = this.initialState
@@ -23,7 +27,7 @@ class Form extends Component {
    }
 
    render() {
-      const { user, artist, title } = this.state
+      const { user, artist, title, genre, durMin, durSec, imageURL } = this.state
 
       return (
         <form>
@@ -48,6 +52,34 @@ class Form extends Component {
 	    id="title"
 	    value={title}
 	    onChange={this.handleChange} />
+	  <label htmlFor="genre">Genre</label>
+          <input
+            type="text"
+            name="genre"
+            id="genre"
+            value={genre}
+            onChange={this.handleChange} />
+	  <label htmlFor="durMin">Minutes</label>
+          <input
+            type="text"
+            name="durMin"
+            id="durMin"
+            value={durMin}
+            onChange={this.handleChange} />
+	  <label htmlFor="durSec">Seconds</label>
+          <input
+            type="text"
+            name="durSec"
+            id="durSec"
+            value={durSec}
+            onChange={this.handleChange} />
+	  <label htmlFor="imageURL">Cover Art Image</label>
+          <input
+            type="text"
+            name="imageURL"
+            id="imageURL"
+            value={imageURL}
+            onChange={this.handleChange} />
           <input type="button" value="Submit" onClick={this.submitForm} />
         </form>
       )
