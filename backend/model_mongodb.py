@@ -130,3 +130,50 @@ class User(Model):
                 maxid = int(user["_id"])
 
         return maxid + 1
+
+class Playlist(Model):
+
+    def get_collection(self, db_client):
+
+        return db_client["inventoryapp"]["inventories"]
+
+    def find_all(self, db_client):
+
+        collection = self.get_collection(db_client)
+
+        playlists = {'playlists': list(collection.find())}
+        for playlist in playlists['playlists']:
+            playlist["_id"] = str(playlist["_id"])
+        return playlist
+
+    def find_by_id(self, db_client, id):
+
+        collection = self.get_collection(db_client)
+
+        playlists = {'playlists': list(collection.find({"_id": id}))}
+        for p in playlisys['playlists']:
+            p["_id"] = str(p["_id"])
+        return playlists
+
+    def find_by_name(self, db_client, title):
+
+        collection = self.get_collection(db_client)
+
+        playlists = {'playlists': list(collection.find({"title": title}))}
+        for p in playlists['playlists']:
+            p["_id"] = str(p["_id"])
+        return playlists
+
+    def get_next_id(self, db_client):
+
+        collection = self.get_collection(db_client)
+
+        playlists = {'playlists': list(collection.find())}
+
+        maxid = 0
+        for p in playlists['playlists']:
+            if int(p["_id"]) > maxid:
+                maxid = int(p["_id"])
+
+        return maxid + 1
+
