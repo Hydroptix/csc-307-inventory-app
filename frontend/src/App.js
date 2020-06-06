@@ -6,33 +6,34 @@ import axios from 'axios'
 
 class App extends Component {
    state = {
-      characters: []
+      songs: [],
+      playlists: []
    }
    
-   removeCharacter = index => {
-      const { characters } = this.state
+   removeSong = index => {
+      const { songs } = this.state
       
-      axios.delete("http://localhost:5000/users/".concat(characters[index].id))
+      axios.delete("http://localhost:5000/songs/".concat(songs[index].id))
 
       this.setState({
-         characters: characters.filter((character, i) => {
+         songs: songs.filter((song, i) => {
             return i !== index
          }),
       })
    }
 
 
-   handleSubmit = character => {
-      this.makePostCall(character).then( callResult => {
+   handleSubmit = playlist => {
+      this.makePostCallPlaylist(playlist).then( callResult => {
          if (callResult.status === 201) {
-            this.setState({ characters: [...this.state.characters, callResult.data] });
+            this.setState({ playlists: [...this.state.palylists, callResult.data] });
          }
       });
    }
 
 
-   makePostCall(character){
-      return axios.post('http://localhost:5000/songs', character)
+   makePostCallPlaylist(playlist){
+      return axios.post('http://localhost:5000/inventories', playlist)
        .then(function (response) {
          console.log(response);
          return response;
@@ -45,11 +46,13 @@ class App extends Component {
 
 
    render() {
-      const { characters } = this.state
+      const { songs } = this.state
+      const { playlists } = this.state
 
       return (
         <div className="container">
-          <Table characterData={characters} 
+          <Table songData={songs}
+	      playlistData={playlists}
 	      removeCharacter={this.removeCharacter} 
 	      addSong={this.addSong} />
 
@@ -60,12 +63,19 @@ class App extends Component {
 
    componentDidMount() {
       axios.get('http://localhost:5000/songs').then(res => {
-          const characters = res.data.songs;
-          this.setState({ characters });
+          const songs = res.data.songs;
+          this.setState({ songs });
       })
       .catch(function (error) {
           //Not handling the error. Just logging into the console.
           console.log(error);
+      });
+      axios.get('http://localhost:5000/inventories').then(res => {
+	  const playlists = res.data.inventories;
+	  this.setState({ playlists });
+      })
+      .catch(function (error) {
+	  console.log(error);
       });
   }
 }
