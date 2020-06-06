@@ -29,6 +29,7 @@ const TableHeader2 = () => {
 
 // Table Body for songs in selected playlist
 const TableBody = props => {
+   console.log(props.songData)
    const rows = props.songData.map((row, index) => {
      console.log(row)
      console.log(index)
@@ -65,7 +66,7 @@ const TableBody2 = props => {
 	    <button onClick={() => props.removePlaylist(index)}>Delete</button>
 	  </td>
 	  <td>
-            <button onClick={() => props.removePlaylist(index)}>Select</button>
+            <button onClick={() => props.selectPlaylist(index)}>Select</button>
           </td>
 	</tr>
       )
@@ -76,14 +77,14 @@ const TableBody2 = props => {
 	      
 
 const Table = props => {
-   const { songData, playlistData, removeSong, removePlaylist, addSong } = props
+   const { songData, playlistData, removeSong, removePlaylist, selectPlaylist, addSong } = props
    
    return (
      <table>
        <TableHeader />
        <TableBody songData={songData} removeSong={removeSong} />
        <TableHeader2 />
-       <TableBody2 playlistData={playlistData} removePlaylist={removePlaylist} />
+       <TableBody2 playlistData={playlistData} removePlaylist={removePlaylist} selectPlaylist={selectPlaylist} />
      </table>
 
    )

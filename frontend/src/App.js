@@ -58,6 +58,23 @@ class App extends Component {
    }
 
 
+   selectPlaylist = index => {
+      const { playlists } = this.state
+      
+      axios.get("http://localhost:5000/inventories/".concat(playlists[index]._id)).then(res => {
+	  const song_ids = res.data.songs;
+	  var songs = {songs: []};
+	  var len = Object.keys(song_ids).length
+	  for (var i=0; i < len; i++) {
+		  axios.get("http://localhost:5000/songs/".concat(String(song_ids[i]))).then(res => {
+			  songs.songs.push(res.data);
+		  })
+	  }
+	  this.setState(songs);
+      })
+   }
+
+
    render() {
       const { songs } = this.state
       const { playlists } = this.state
@@ -68,6 +85,7 @@ class App extends Component {
 	      playlistData={playlists}
 	      removeSong={this.removeSong}
 	      removePlaylist={this.removePlaylist}
+	      selectPlaylist={this.selectPlaylist}
 	      addSong={this.addSong} />
 
           <Form handleSubmit={this.handleSubmit} />

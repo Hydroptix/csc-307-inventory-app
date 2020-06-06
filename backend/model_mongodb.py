@@ -152,7 +152,7 @@ class Playlist(Model):
         collection = self.get_collection(db_client)
 
         playlists = {'playlists': list(collection.find({"_id": id}))}
-        for p in playlisys['playlists']:
+        for p in playlists['playlists']:
             p["_id"] = str(p["_id"])
         return playlists
 
