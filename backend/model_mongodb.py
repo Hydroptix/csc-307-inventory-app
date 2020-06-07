@@ -113,6 +113,7 @@ class User(Model):
         collection = self.get_collection(db_client)
 
         users = {'users': list(collection.find())}
+        print(users)
         for user in users['users']:
             user["_id"] = str(user["_id"])
         return users
@@ -126,11 +127,12 @@ class User(Model):
             user["_id"] = str(user["_id"])
         return users
 
-    def find_by_name(self, db_client, title):
+    def find_by_name(self, db_client, user_name):
 
         collection = self.get_collection(db_client)
 
-        users = {'songs': list(collection.find({"name": title}))}
+        users = {'users': list(collection.find({"name": user_name}))}
+
         for user in users['users']:
             user["_id"] = str(user["_id"])
         return users
