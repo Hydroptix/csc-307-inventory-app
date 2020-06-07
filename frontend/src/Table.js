@@ -50,6 +50,7 @@ const TableBody = props => {
         </tr>
       )
    })
+   console.log(rows)
 
    return <tbody>{rows}</tbody>
 }
