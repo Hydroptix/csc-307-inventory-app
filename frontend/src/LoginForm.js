@@ -15,8 +15,12 @@ class LoginForm extends Component {
     })
   }
 
-  handleSubmit = () => {
+  handleLogin = () => {
     this.props.handleSubmit(this.state)
+  }
+
+  handleRegister = () => {
+    this.props.handleRegister(this.state)
   }
 
   render () {
@@ -32,11 +36,24 @@ class LoginForm extends Component {
           value={username}
           onChange={this.handleChange}
         />
-        <input
-          type="button"
-          value="Login"
-          onClick={this.handleSubmit}
-        />
+        {/* The below view html element allows the buttons to be side by side*/}
+        <tr>
+          <td>
+            <input
+              type="button"
+              value="Login"
+              onClick={this.handleLogin}
+            />
+          </td>
+          <td>
+            <input
+              type="button"
+              value="Register"
+              onClick={this.handleRegister}
+            />
+          </td>
+
+        </tr>
       </form>
     )
   }
