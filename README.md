@@ -13,7 +13,7 @@ View songs, and add them to playlists! Register a username, then login and view 
 [https://github.com/Hydroptix/csc-307-inventory-app/wiki/Diagrams](https://github.com/Hydroptix/csc-307-inventory-app/wiki/Diagrams)
 
 ## Code Style:
-  We have decided to use the original Python style guide and the JavaScript standard style.
+  We have decided to use the [Python PEP 8 style guide](https://www.python.org/dev/peps/pep-0008/) and [JavaScript Standard Style.](https://standardjs.com/)
 
 ## IDE Setup:
 
