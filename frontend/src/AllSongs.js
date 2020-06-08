@@ -16,7 +16,7 @@ class AllSongs extends Component {
 
     this.setState({
       songs: songs.filter((song, i) => {
-        
+
         return i !== index
       }),
     })
@@ -25,7 +25,7 @@ class AllSongs extends Component {
   removePlaylist = index => {
     const { playlists } = this.state
 
-    axios.delete('http://localhost:5000/inventories/'.concat(playlists[index]._id))
+    axios.delete('http://localhost:5000/inv/'.concat(playlists[index]._id))
 
     this.setState({
       playlists: playlists.filter((playlist, i) => {
@@ -44,7 +44,7 @@ class AllSongs extends Component {
   }
 
   makePostCallPlaylist (playlist) {
-    return axios.post('http://localhost:5000/inventories', playlist)
+    return axios.post('http://localhost:5000/inv', playlist)
 
       .then(function (response) {
         console.log(response)
@@ -68,7 +68,7 @@ class AllSongs extends Component {
     //Need to preserve this so we can access the state from inside the map statement
     let thisComponent = this
 
-    axios.get('http://localhost:5000/inventories/'.concat(playlists[index]._id)).then(res => {
+    axios.get('http://localhost:5000/inv/'.concat(playlists[index]._id)).then(res => {
       const song_ids = res.data.songs
 
       song_ids.map((id) => {
@@ -110,8 +110,8 @@ class AllSongs extends Component {
         //Not handling the error. Just logging into the console.
         console.log(error)
       })
-    axios.get('http://localhost:5000/inventories').then(res => {
-      const playlists = res.data.playlists
+    axios.get('http://localhost:5000/inv').then(res => {
+      const playlists = res.data.inventories
       this.setState({ playlists })
     })
       .catch(function (error) {
