@@ -10,9 +10,10 @@ from flask_cors import CORS
 import random
 app = Flask(__name__)
 CORS(app)
+import os.path as path
 
 
-CREDENTIALS_PATH = defs.CONF_PATH + "/db.credentials"
+CREDENTIALS_PATH = path.join(defs.CONF_PATH, "db.credentials")
 DB_IP = "theinventorydb-xajse.mongodb.net"
 
 def get_db_client() -> MongoClient:
