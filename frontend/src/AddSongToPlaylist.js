@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import querystring from 'querystring'
 import PlaylistSelectTable from './PlaylistSelectTable'
 import axios from 'axios'
+import SingleSongTable from './SingleSongTable'
 
 class AddSongToPlaylist extends Component {
   state = {
     songId: 0,
+    songData: [],
     playlists: [],
     errorMessage: ''
   }
@@ -53,9 +55,13 @@ class AddSongToPlaylist extends Component {
 
   render () {
     const { playlists } = this.state
+    const { songData } = this.state
     console.log('Made it!')
     return (
       <div className="container">
+        <SingleSongTable
+          songData={songData}
+        />
         <strong style={{ color: 'red' }}>{this.state.errorMessage}</strong>
         <PlaylistSelectTable
           playlistData={playlists}
@@ -79,6 +85,14 @@ class AddSongToPlaylist extends Component {
       .catch(function (error) {
         console.log(error)
       })
+
+    let thisComponent = this
+
+    axios.get('http://localhost:5000/songs/'.concat(String(id))).then(function (res) {
+      thisComponent.setState({
+        songData: [res.data]
+      })
+    })
   }
 
 }

@@ -5,7 +5,7 @@ const TableHeader = () => {
   return (
     <thead>
     <tr>
-      <th>Playlist Name</th>
+      <th>Select a playlist to add this song to:</th>
     </tr>
     </thead>
   )
@@ -19,7 +19,7 @@ const TableBody = props => {
       <tr key={index}>
         <td>{row.title}</td>
         <td>
-          <button onClick={() => props.selectPlaylist(index)}>Add</button>
+          <button onClick={() => props.selectPlaylist(index)}>Add Song</button>
         </td>
       </tr>
     )

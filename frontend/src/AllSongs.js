@@ -84,7 +84,7 @@ class AllSongs extends Component {
 
   addSong = index => {
     const { songs } = this.state
-    this.history.push('/songtoplaylist?songid='.concat(String(songs[index]._id)))
+    this.props.history.push('/songtoplaylist?songid='.concat(String(songs[index]._id)))
   }
 
 

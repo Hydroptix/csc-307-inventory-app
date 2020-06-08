@@ -92,7 +92,7 @@ const Table = props => {
   return (
     <table>
       <TableHeader/>
-      <TableBody songData={songData} removeSong={removeSong}/>
+      <TableBody songData={songData} removeSong={removeSong} addSong={ addSong } />
       <TableHeader2/>
       <TableBody2 playlistData={playlistData} removePlaylist={removePlaylist} selectPlaylist={selectPlaylist}/>
     </table>
