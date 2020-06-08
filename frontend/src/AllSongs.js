@@ -112,13 +112,13 @@ class AllSongs extends Component {
                addSong={this.addSong}
                showDelete={(currentPlaylist >= 0)}
         />
-
+        <input type="button" value="All Songs" onClick={this.getAllSongs} />
         <Form handleSubmit={this.handleSubmit}/>
       </div>
     )
   }
 
-  componentDidMount () {
+  getAllSongs = () => {
     axios.get('http://localhost:5000/songs').then(res => {
       const songs = res.data.songs
       this.setState({ songs })
@@ -127,6 +127,11 @@ class AllSongs extends Component {
         //Not handling the error. Just logging into the console.
         console.log(error)
       })
+  }
+
+  componentDidMount () {
+    this.getAllSongs()
+
     axios.get('http://localhost:5000/inv').then(res => {
       const playlists = res.data.inventories
       this.setState({ playlists })
