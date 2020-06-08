@@ -71,9 +71,9 @@ class Song(Model):
 
     def find_by_id(self, id):
 
-        songs = {'songs': list(self.collection.find({"_id": id}))}
+        song = self.collection.find({"_id": id})[0]
 
-        return songs
+        return song
 
     def find_by_title(self, title):
         reg = re.compile("(" + title + ")", re.IGNORECASE)
@@ -176,9 +176,9 @@ class Inventory(Model):
         return invs
 
     def find_by_id(self, id):
-        invs = {'inventories': list(self.collection.find({"_id": int(id)}))}
+        inv = self.collection.find({"_id": int(id)})[0]
 
-        return invs
+        return inv
 
     def get_next_id(self):
         invs = {'inventories': list(self.collection.find())}
