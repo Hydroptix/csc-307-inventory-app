@@ -16,6 +16,7 @@ class AllSongs extends Component {
 
     this.setState({
       songs: songs.filter((song, i) => {
+        
         return i !== index
       }),
     })
@@ -37,12 +38,14 @@ class AllSongs extends Component {
     this.makePostCallPlaylist(playlist).then(callResult => {
       if (callResult.status === 201) {
         this.setState({ playlists: [...this.state.playlists, callResult.data] })
+
       }
     })
   }
 
   makePostCallPlaylist (playlist) {
     return axios.post('http://localhost:5000/inventories', playlist)
+
       .then(function (response) {
         console.log(response)
         return response
