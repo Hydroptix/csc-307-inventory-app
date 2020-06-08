@@ -197,3 +197,11 @@ class Playlist(Model):
 
         return maxid + 1
 
+    def add_to(self, db_client, p_id, s_id):
+        
+        collection = self.get_collection(db_client)
+
+        playlist = self.find_by_id(db_client, p_id)
+
+        playlist.songs.append(s_id)
+

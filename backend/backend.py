@@ -135,3 +135,10 @@ def get_inventory(id):
 
         else:
             return jsonify(success=False, status_code = 404)
+
+@backend.route('/inventories/<id>/add', methods=['POST'])
+def add_song(s_id, p_id):
+    if request.method == 'POST':
+        playlist = Playlist().find_by_id(db_client, int(p_id))['playlists'][0]
+        playlist.add_to(db_client, int(p_id), int(s_id))
+
