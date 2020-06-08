@@ -11,12 +11,12 @@ class AllSongs extends Component {
   }
 
   removeSong = songId => {
-    const { playlists, currentPlaylist, songs} = this.state
+    const { playlists, currentPlaylist, songs } = this.state
 
     axios.get('http://localhost:5000/inv/'.concat(playlists[currentPlaylist]._id)).then(res => {
       const inventory = res.data
 
-      const newSongs = inventory.songs.filter(function(song) {
+      const newSongs = inventory.songs.filter(function (song) {
         return song !== songId
       })
 
@@ -24,7 +24,7 @@ class AllSongs extends Component {
 
       this.makePostCallPlaylist(inventory)
 
-      const newSongState = songs.filter(function(song) {
+      const newSongState = songs.filter(function (song) {
         console.log(song._id)
         return song._id !== songId
       })
@@ -50,9 +50,9 @@ class AllSongs extends Component {
 
   handleSubmit = playlist => {
     this.makePostCallPlaylist(playlist).then(callResult => {
-      if (callResult.status === 201) {
+      console.log(callResult)
+      if (callResult.status === 200) {
         this.setState({ playlists: [...this.state.playlists, callResult.data] })
-
       }
     })
   }
@@ -112,13 +112,13 @@ class AllSongs extends Component {
                addSong={this.addSong}
                showDelete={(currentPlaylist >= 0)}
         />
-
+        <input type="button" value="All Songs" onClick={this.getAllSongs} />
         <Form handleSubmit={this.handleSubmit}/>
       </div>
     )
   }
 
-  componentDidMount () {
+  getAllSongs = () => {
     axios.get('http://localhost:5000/songs').then(res => {
       const songs = res.data.songs
       this.setState({ songs })
@@ -127,6 +127,11 @@ class AllSongs extends Component {
         //Not handling the error. Just logging into the console.
         console.log(error)
       })
+  }
+
+  componentDidMount () {
+    this.getAllSongs()
+
     axios.get('http://localhost:5000/inv').then(res => {
       const playlists = res.data.inventories
       this.setState({ playlists })

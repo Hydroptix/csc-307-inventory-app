@@ -116,7 +116,7 @@ def get_inv():
         inv_to_add = Inventory(db_client, json=request.get_json())
         db_resp = inv_to_add.save(inv_to_add.db_client)
 
-        http_resp = jsonify(inv_to_add.json, 201)
+        http_resp = jsonify(inv_to_add.json)
 
         return http_resp
 
