@@ -81,6 +81,12 @@ class AllSongs extends Component {
     })
   }
 
+
+  addSongs = songindex, playlistindex => {
+    axios.post('http://localhost:5000/inventories/'.concat(String
+  }
+
+
   render () {
     const { songs } = this.state
     const { playlists } = this.state
