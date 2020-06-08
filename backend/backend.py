@@ -3,7 +3,7 @@ from flask import request
 from flask import jsonify
 from flask_cors import CORS
 import db_connect
-from model_mongodb import Song, User
+from model_mongodb import Song, User, Playlist
 
 db_client = db_connect.get_db_client()
 
@@ -89,3 +89,56 @@ def get_user(id):
 
         else:
             return jsonify(success=False, status_code = 404)
+
+@backend.route('/inventories', methods=['GET', 'POST'])
+def get_inventories():
+    if request.method == 'GET':
+
+        search_id = request.args.get('id')
+        search_name = request.args.get('title')
+
+        if search_id:
+            return Playlist().find_by_id(db_client, int(search_id))
+
+        elif search_name:
+            return Playlist().find_by_name(db_client, search_name)
+
+        else:
+            return Playlist().find_all(db_client)
+
+    elif request.method == 'POST':
+        playlistToAdd = Playlist(request.get_json())
+
+        db_resp = playlistToAdd.save(db_client)
+
+        http_resp = jsonify(playlistToAdd),201
+
+        return http_resp
+
+@backend.route('/inventories/<id>', methods=['GET', 'DELETE'])
+def get_inventory(id):
+    if request.method == 'GET':
+        # TODO: refactor the model_mongodb to only return one thing instead of
+        # a dictionary guaranteed to have one thing
+        return Playlist().find_by_id(db_client, int(id))['playlists'][0]
+
+    elif request.method == 'DELETE':
+        playlist = Playlist({'_id': id})
+        db_resp = playlist.remove(db_client)
+
+        print(db_resp)
+
+        if db_resp['n'] == 1:
+            http_resp = jsonify(succes=True, status_code = 204)
+
+            return http_resp
+
+        else:
+            return jsonify(success=False, status_code = 404)
+
+@backend.route('/inventories/<id>/add', methods=['POST'])
+def add_song(s_id, p_id):
+    if request.method == 'POST':
+        playlist = Playlist().find_by_id(db_client, int(p_id))['playlists'][0]
+        playlist.add_to(db_client, int(p_id), int(s_id))
+

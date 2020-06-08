@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 const Login = lazy(() => import('./Login'))
 const AllSongs = lazy(() => import('./AllSongs'))
+const AddSongToPlaylist = lazy(() => import('./AddSongToPlaylist'))
 
 const App = () => (
   <Router>
@@ -10,6 +11,7 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={Login}/>
         <Route path="/songs" component={AllSongs}/>
+        <Route path="/songtoplaylist" component={AddSongToPlaylist}/>
       </Switch>
     </Suspense>
   </Router>
