@@ -12,7 +12,7 @@ class AllSongs extends Component {
   removeSong = index => {
     const { songs } = this.state
 
-    axios.delete('http://localhost:5000/songs/'.concat(songs[index].id))
+    axios.delete('http://localhost:5000/songs/'.concat(songs[index]._id))
 
     this.setState({
       songs: songs.filter((song, i) => {
@@ -82,8 +82,9 @@ class AllSongs extends Component {
   }
 
 
-  addSongs = songindex, playlistindex => {
-    axios.post('http://localhost:5000/inventories/'.concat(String
+  addSong = index => {
+    const { songs } = this.state
+    this.history.push('/songtoplaylist?songid='.concat(String(songs[index]._id)))
   }
 
 
