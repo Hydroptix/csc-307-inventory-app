@@ -11,12 +11,12 @@ class AllSongs extends Component {
   }
 
   removeSong = songId => {
-    const { playlists, currentPlaylist, songs} = this.state
+    const { playlists, currentPlaylist, songs } = this.state
 
     axios.get('http://localhost:5000/inv/'.concat(playlists[currentPlaylist]._id)).then(res => {
       const inventory = res.data
 
-      const newSongs = inventory.songs.filter(function(song) {
+      const newSongs = inventory.songs.filter(function (song) {
         return song !== songId
       })
 
@@ -24,7 +24,7 @@ class AllSongs extends Component {
 
       this.makePostCallPlaylist(inventory)
 
-      const newSongState = songs.filter(function(song) {
+      const newSongState = songs.filter(function (song) {
         console.log(song._id)
         return song._id !== songId
       })
@@ -50,9 +50,9 @@ class AllSongs extends Component {
 
   handleSubmit = playlist => {
     this.makePostCallPlaylist(playlist).then(callResult => {
-      if (callResult.status === 201) {
+      console.log(callResult)
+      if (callResult.status === 200) {
         this.setState({ playlists: [...this.state.playlists, callResult.data] })
-
       }
     })
   }
