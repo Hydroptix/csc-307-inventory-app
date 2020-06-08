@@ -66,7 +66,6 @@ def get_users():
 
     elif request.method == 'POST':
         user_to_add = User(db_client, json=request.get_json())
-
         db_resp = user_to_add.save(db_client)
 
         http_resp = jsonify(user_to_add.json, 201)
@@ -115,7 +114,6 @@ def get_inv():
 
     elif request.method == 'POST':
         inv_to_add = Inventory(db_client, json=request.get_json())
-
         db_resp = inv_to_add.save(inv_to_add.db_client)
 
         http_resp = jsonify(inv_to_add.json, 201)

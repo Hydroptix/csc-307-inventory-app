@@ -1,3 +1,5 @@
+import json
+
 import pymongo
 import re
 from pymongo import IndexModel
@@ -22,8 +24,11 @@ class Model(dict):
         print(type(db_client))
         collection = db_client['inventoryapp'].get_collection(self.type)
         print(f"_id: {self._id}, name: {self.name}")
-        if not self._id:
-            self._id = self.get_next_id()
+        data = self.json
+        if "_id" not in data:
+
+            data["_id"] = self.get_next_id()
+            print(data)
             collection.insert(self.json)
         else:
             collection.update(
@@ -119,6 +124,8 @@ class User(Model):
     def find_all(self):
 
         users = {'users': list(self.collection.find())}
+        for user in users['users']:
+            user['_id'] = str(user['_id'])
         return users
 
     def find_by_id(self, id):
@@ -178,8 +185,8 @@ class Inventory(Model):
         invs = {'inventories': list(self.collection.find())}
         maxid = 0
         for inv in invs['inventories']:
-            if int(inv["_id"]) > maxid:
-                maxid = int(inv["_id"])
+                if int(inv["_id"]) > maxid:
+                    maxid = int(inv["_id"])
         return maxid + 1
 
     def reload(self,id,db_client):
