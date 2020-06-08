@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 class Form extends Component {
    initialState = {
       title: '',
+      songs: []
    }
 
    state = this.initialState
