@@ -43,7 +43,14 @@ const TableBody = props => {
         <td>{row.title}</td>
         <td>{row.genre}</td>
         <td>{row.durMin}:{row.durSec}</td>
-        <td>{row.image}</td>
+        <td>
+	    <img
+	     src = {row.image}
+	     alt = 'new'
+	     width = "100"
+	     height = "100"
+	    />
+	</td>
         <td>
           <button onClick={() => props.addSong(index)}>Add to Playlist</button>
         </td>
