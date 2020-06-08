@@ -26,7 +26,7 @@ class Form extends Component {
 
       return (
         <form>
-          <label htmlFor="title">Playlist Name</label>
+          <label htmlFor="title">Add New Playlist</label>
           <input 
             type="text"
             name="title"
