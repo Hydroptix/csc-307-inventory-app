@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import querystring from 'querystring'
 import PlaylistSelectTable from './PlaylistSelectTable'
 import axios from 'axios'
 import SingleSongTable from './SingleSongTable'
@@ -41,7 +40,7 @@ class AddSongToPlaylist extends Component {
 
         inventory.songs.push(songId)
         console.log(inventory)
-        let postRes = this.makePostCallPlaylist(inventory)
+        this.makePostCallPlaylist(inventory)
 
         console.log("made post request")
 
