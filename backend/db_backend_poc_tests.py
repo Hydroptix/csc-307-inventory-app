@@ -1,6 +1,6 @@
 from pymongo.errors import DuplicateKeyError
 
-import db_backend_poc as src
+import db_connect as src
 from os import path
 
 
