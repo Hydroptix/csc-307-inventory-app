@@ -6,19 +6,33 @@ import axios from 'axios'
 class AllSongs extends Component {
   state = {
     songs: [],
-    playlists: []
+    playlists: [],
+    currentPlaylist: -1
   }
 
-  removeSong = index => {
-    const { songs } = this.state
+  removeSong = songId => {
+    const { playlists, currentPlaylist, songs} = this.state
 
-    axios.delete('http://localhost:5000/songs/'.concat(songs[index]._id))
+    axios.get('http://localhost:5000/inv/'.concat(playlists[currentPlaylist]._id)).then(res => {
+      const inventory = res.data
 
-    this.setState({
-      songs: songs.filter((song, i) => {
+      const newSongs = inventory.songs.filter(function(song) {
+        return song !== songId
+      })
 
-        return i !== index
-      }),
+      inventory.songs = newSongs
+
+      this.makePostCallPlaylist(inventory)
+
+      const newSongState = songs.filter(function(song) {
+        console.log(song._id)
+        return song._id !== songId
+      })
+
+      this.setState({
+        songs: newSongState
+      })
+
     })
   }
 
@@ -59,10 +73,9 @@ class AllSongs extends Component {
   selectPlaylist = index => {
     const { playlists } = this.state
 
-    console.log('Running select')
-
     this.setState({
-      songs: []
+      songs: [],
+      currentPlaylist: index
     })
 
     //Need to preserve this so we can access the state from inside the map statement
@@ -81,18 +94,13 @@ class AllSongs extends Component {
     })
   }
 
-
-  addSong = index => {
+  addSong = songId => {
     const { songs } = this.state
-    this.props.history.push('/songtoplaylist?songid='.concat(String(songs[index]._id)))
+    this.props.history.push('/songtoplaylist?songid='.concat(String(songs[songId]._id)))
   }
 
-
   render () {
-    const { songs } = this.state
-    const { playlists } = this.state
-
-    console.log(JSON.stringify(songs))
+    const { songs, playlists, currentPlaylist } = this.state
 
     return (
       <div className="container">
@@ -101,7 +109,9 @@ class AllSongs extends Component {
                removeSong={this.removeSong}
                removePlaylist={this.removePlaylist}
                selectPlaylist={this.selectPlaylist}
-               addSong={this.addSong}/>
+               addSong={this.addSong}
+               showDelete={(currentPlaylist >= 0)}
+        />
 
         <Form handleSubmit={this.handleSubmit}/>
       </div>

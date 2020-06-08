@@ -29,13 +29,20 @@ const TableHeader2 = () => {
 
 // Table Body for songs in selected playlist
 const TableBody = props => {
-  //console.log("songData")
-  //console.log(JSON.stringify(props.songData))
-  let i = 0
 
   let rows = props.songData.map((row, index) => {
-    //console.log("map")
-    i++
+
+    console.log(props.showDelete)
+
+    //Don't show the delete button if told not to
+    let deleteElement = undefined
+    if (props.showDelete) {
+      deleteElement =
+        <td>
+          <button onClick={() => props.removeSong(row._id)}>Remove from Playlist</button>
+        </td>
+    }
+
     return (
       <tr key={index}>
         <td>{row._id}</td>
@@ -44,24 +51,20 @@ const TableBody = props => {
         <td>{row.genre}</td>
         <td>{row.durMin}:{row.durSec}</td>
         <td>
-	    <img
-	     src = {row.image}
-	     alt = 'new'
-	     width = "100"
-	     height = "100"
-	    />
-	</td>
+          <img
+            src={row.image}
+            alt='new'
+            width="100"
+            height="100"
+          />
+        </td>
         <td>
           <button onClick={() => props.addSong(index)}>Add to Playlist</button>
         </td>
-        <td>
-          <button onClick={() => props.removeSong(index)}>Delete</button>
-        </td>
+        {deleteElement}
       </tr>
     )
   })
-  //console.log("map ran " + i + "times")
-  //console.log(rows)
 
   return <tbody>{rows}</tbody>
 }
@@ -87,12 +90,12 @@ const TableBody2 = props => {
 }
 
 const Table = props => {
-  const { songData, playlistData, removeSong, removePlaylist, selectPlaylist, addSong } = props
+  const { songData, playlistData, removeSong, removePlaylist, selectPlaylist, addSong, showDelete } = props
 
   return (
     <table>
       <TableHeader/>
-      <TableBody songData={songData} removeSong={removeSong} addSong={ addSong } />
+      <TableBody songData={songData} removeSong={removeSong} addSong={addSong} showDelete={showDelete}/>
       <TableHeader2/>
       <TableBody2 playlistData={playlistData} removePlaylist={removePlaylist} selectPlaylist={selectPlaylist}/>
     </table>
