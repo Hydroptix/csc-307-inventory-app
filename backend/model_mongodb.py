@@ -1,8 +1,16 @@
+import json
+
 import pymongo
-from bson import ObjectId
+import re
+from pymongo import IndexModel
+from pymongo import TEXT
+
+from bson.objectid import ObjectId
 
 
 # Modified from bcdasilva's pymongo model
+
+
 class Model(dict):
     """
     A simple model that wraps mongodb document
@@ -11,57 +19,46 @@ class Model(dict):
     __delattr__ = dict.__delitem__
     __setattr__ = dict.__setitem__
 
-    # We need to pass in db_client explicitly because if the client
-    # is added to the class itself it will be included in the JSON request,
-    # which the backend will throw an error for
     def save(self, db_client):
-        """
-        Send the current state to the database
-        :param db_client: MongoDB client
-        :return: None
-        """
-        collection = self.get_collection(db_client)
+        print(type(self))
+        print(type(db_client))
+        collection = db_client['inventoryapp'].get_collection(self.type)
         print(f"_id: {self._id}, name: {self.name}")
-        if not self._id:
-            self._id = self.get_next_id(db_client)
-            collection.insert(self)
+        data = self.json
+        if "_id" not in data:
+
+            data["_id"] = self.get_next_id()
+            print(data)
+            collection.insert(self.json)
         else:
             collection.update(
                 {"_id": int(self._id)})
         self._id = str(self._id)
 
-    def reload(self, db_client):
-        """
-        Replace the current state with the database information
-        :return:
-        """
-        if self._id:
-            collection = self.get_collection(db_client)
-            result = collection.find_one({"_id": int(self._id)})
-            if result:
-                self.update(result)
-                self._id = str(self._id)
-                return True
+    def reload(self, id, db_client):
+        result = self.collection.find_one({"_id": int(id)})
+        print(self.json)
+        print(result)
+        if result:
+            self.collection.update_one({"_id": int(id)}, {'$set': {self.type: self.json}})
+            return True
         return False
 
-    def remove(self, db_client):
-        if self._id:
-            print(self._id)
-            collection = self.get_collection(db_client)
-            resp = collection.remove({"_id": int(self._id)})
+    def remove(self, db_client, id):
+        if id:
+            collection = db_client["inventoryapp"].get_collection(self.type)
+            resp = collection.remove({"_id": int(id)})
             self.clear()
             return resp
 
 
-# Dictionary of attributes representing a song in the database
 class Song(Model):
 
-    # it's safe to include the db_client in Song because we never write a song's
-    # state to the database
     def __init__(self, db_client):
 
         self.db_client = db_client
         self.collection = db_client["inventoryapp"]["items"]
+        self.type = 'items'
 
         super().__init__()
 
@@ -75,73 +72,78 @@ class Song(Model):
     def find_by_id(self, id):
 
         songs = {'songs': list(self.collection.find({"_id": id}))}
-        for song in songs['songs']:
-            song["_id"] = str(song["_id"])
+
         return songs
 
     def find_by_title(self, title):
-
-        songs = {'songs': list(self.collection.find({"title": title}))}
+        reg = re.compile("(" + title + ")", re.IGNORECASE)
+        songs = {'songs': list(self.collection.find({"title": {'$regex': reg}}))}
         for song in songs['songs']:
             song["_id"] = str(song["_id"])
         return songs
 
     def find_by_artist(self, artist):
-
-        songs = {'songs': list(self.collection.find({"artist": artist}))}
+        reg = re.compile("(" + artist + ")", re.IGNORECASE)
+        songs = {'songs': list(self.collection.find({"artist": {"$regex": reg}}))}
         for song in songs['songs']:
-            song["_id"] = str(songs["_id"])
+            song['_id'] = str(song["_id"])
         return songs
 
     def find_by_genre(self, genre):
-
-        songs = {'songs': list(self.collection.find({"artist": genre}))}
+        reg = re.compile("(" + genre + ")", re.IGNORECASE)
+        songs = {'songs': list(self.collection.find({"genre": {"$regex": reg}}))}
         for song in songs['songs']:
-            song["_id"] = str(songs["_id"])
+            song['_id'] = str(song["_id"])
         return songs
 
+    def get_next_id(self):
 
-# Dictionary of attributes representing a user in the database
+        songs = {'songs': list(self.collection.find())}
+
+        maxid = 0
+        for song in songs['users']:
+            if int(song["_id"]) > maxid:
+                maxid = int(song["_id"])
+
+        return maxid + 1
+
+
 class User(Model):
 
-    def get_collection(self, db_client):
+    def __init__(self, db_client, json=None):
 
-        return db_client["inventoryapp"]["users"]
+        self.db_client = db_client
+        self.json = json
+        print(db_client)
+        print(self.json)
+        self.collection = db_client["inventoryapp"]["users"]
+        self.type = 'users'
 
-    def find_all(self, db_client):
+        super().__init__()
 
-        collection = self.get_collection(db_client)
+    def find_all(self):
 
-        users = {'users': list(collection.find())}
-        print(users)
+        users = {'users': list(self.collection.find())}
+        for user in users['users']:
+            user['_id'] = str(user['_id'])
+        return users
+
+    def find_by_id(self, id):
+
+        users = {'users': list(self.collection.find({"_id": int(id)}))}
+
+        return users
+
+    def find_by_name(self, title):
+        reg = re.compile("(" + title + ")", re.IGNORECASE)
+        users = {'users': list(self.collection.find({"name": {"$regex": reg}}))}
         for user in users['users']:
             user["_id"] = str(user["_id"])
         return users
 
-    def find_by_id(self, db_client, id):
+    def get_next_id(self):
 
-        collection = self.get_collection(db_client)
-
-        users = {'users': list(collection.find({"_id": id}))}
-        for user in users['users']:
-            user["_id"] = str(user["_id"])
-        return users
-
-    def find_by_name(self, db_client, user_name):
-
-        collection = self.get_collection(db_client)
-
-        users = {'users': list(collection.find({"name": user_name}))}
-
-        for user in users['users']:
-            user["_id"] = str(user["_id"])
-        return users
-
-    def get_next_id(self, db_client):
-
-        collection = self.get_collection(db_client)
-
-        users = {'users': list(collection.find())}
+        users = {'users': list(self.collection.find())}
 
         maxid = 0
         for user in users['users']:
@@ -150,50 +152,48 @@ class User(Model):
 
         return maxid + 1
 
+    def reload(self, id, db_client):
+        result = self.collection.find_one({"_id": int(id)})
+        print(self.json)
+        print(result)
+        if result:
+            self.collection.update_one({"_id": int(id)}, {'$set': {"name": self.json['name']}})
+            return True
+        return False
 
-class Playlist(Model):
 
-    def get_collection(self, db_client):
+class Inventory(Model):
+    def __init__(self, db_client, json=None):
+        self.db_client = db_client
+        self.collection = db_client["inventoryapp"]['inventories']
+        self.json = json
+        self.type = "inventories"
 
-        return db_client["inventoryapp"]["inventories"]
+        super().__init__()
 
-    def find_all(self, db_client):
+    def find_all(self):
+        invs = {'inventories': list(self.collection.find({}))}
+        return invs
 
-        collection = self.get_collection(db_client)
+    def find_by_id(self, id):
+        invs = {'inventories': list(self.collection.find({"_id": int(id)}))}
 
-        playlists = {'playlists': list(collection.find())}
-        for playlist in playlists['playlists']:
-            playlist["_id"] = str(playlist["_id"])
-        return playlists
+        return invs
 
-    def find_by_id(self, db_client, id):
-
-        collection = self.get_collection(db_client)
-
-        playlists = {'playlists': list(collection.find({"_id": id}))}
-        for p in playlists['playlists']:
-            p["_id"] = str(p["_id"])
-        return playlists
-
-    def find_by_name(self, db_client, title):
-
-        collection = self.get_collection(db_client)
-
-        playlists = {'playlists': list(collection.find({"title": title}))}
-        for p in playlists['playlists']:
-            p["_id"] = str(p["_id"])
-        return playlists
-
-    def get_next_id(self, db_client):
-
-        collection = self.get_collection(db_client)
-
-        playlists = {'playlists': list(collection.find())}
-
+    def get_next_id(self):
+        invs = {'inventories': list(self.collection.find())}
         maxid = 0
-        for p in playlists['playlists']:
-            if int(p["_id"]) > maxid:
-                maxid = int(p["_id"])
-
+        for inv in invs['inventories']:
+            if int(inv["_id"]) > maxid:
+                maxid = int(inv["_id"])
         return maxid + 1
 
+    def reload(self, id, db_client):
+        result = self.collection.find_one({"_id": int(id)})
+        print(self.json)
+        print(result)
+        if result:
+            self.collection.update_one({"_id": int(id)}, {'$set': {"songs": self.json['songs']}})
+            self.collection.update_one({'_id': int(id)}, {'$set': {"title": self.json['title']}})
+            return True
+        return False
