@@ -31,9 +31,9 @@ class Model(dict):
             print(data)
             collection.insert(self.json)
         else:
+            print(self._id)
             collection.update(
-                {"_id": int(self._id)})
-        self._id = str(self._id)
+                {"_id": int(data['_id'])}, self.json)
 
     def reload(self, id, db_client):
         result = self.collection.find_one({"_id": int(id)})
