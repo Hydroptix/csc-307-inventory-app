@@ -35,12 +35,12 @@ class Model(dict):
                 {"_id": int(self._id)})
         self._id = str(self._id)
 
-    def reload(self,id,db_client):
+    def reload(self, id, db_client):
         result = self.collection.find_one({"_id": int(id)})
         print(self.json)
         print(result)
         if result:
-            self.collection.update_one({"_id":int(id)},{'$set':{self.type:self.json}})
+            self.collection.update_one({"_id": int(id)}, {'$set': {self.type: self.json}})
             return True
         return False
 
@@ -110,7 +110,7 @@ class Song(Model):
 
 class User(Model):
 
-    def __init__(self, db_client, json = None):
+    def __init__(self, db_client, json=None):
 
         self.db_client = db_client
         self.json = json
@@ -152,18 +152,18 @@ class User(Model):
 
         return maxid + 1
 
-    def reload(self,id,db_client):
+    def reload(self, id, db_client):
         result = self.collection.find_one({"_id": int(id)})
         print(self.json)
         print(result)
         if result:
-            self.collection.update_one({"_id":int(id)},{'$set':{"name":self.json['name']}})
+            self.collection.update_one({"_id": int(id)}, {'$set': {"name": self.json['name']}})
             return True
         return False
 
 
 class Inventory(Model):
-    def __init__(self, db_client, json = None):
+    def __init__(self, db_client, json=None):
         self.db_client = db_client
         self.collection = db_client["inventoryapp"]['inventories']
         self.json = json
@@ -180,21 +180,20 @@ class Inventory(Model):
 
         return invs
 
-
     def get_next_id(self):
         invs = {'inventories': list(self.collection.find())}
         maxid = 0
         for inv in invs['inventories']:
-                if int(inv["_id"]) > maxid:
-                    maxid = int(inv["_id"])
+            if int(inv["_id"]) > maxid:
+                maxid = int(inv["_id"])
         return maxid + 1
 
-    def reload(self,id,db_client):
+    def reload(self, id, db_client):
         result = self.collection.find_one({"_id": int(id)})
         print(self.json)
         print(result)
         if result:
-            self.collection.update_one({"_id":int(id)},{'$set':{"songs":self.json['songs']}})
-            self.collection.update_one({'_id':int(id)},{'$set':{"title":self.json['title']}})
+            self.collection.update_one({"_id": int(id)}, {'$set': {"songs": self.json['songs']}})
+            self.collection.update_one({'_id': int(id)}, {'$set': {"title": self.json['title']}})
             return True
         return False
